@@ -1,0 +1,24 @@
+	1.	To run a local server for PHP development.
+
+	2.	$
+
+	3.	$array = [];
+
+	4.	Model-View-Controller.
+
+	5.	Create, Read, Update, Delete.
+
+	6.	Route::get('/hello', function() { return 'Hello, World!'; });
+
+	7.	Hello, {{ $name }}
+
+	8.	Route::get('/dashboard', function () { 
+			return view('dashboard'); 
+		});
+
+	9.	Route::get('/hello/{name}', function($name) { 
+		return "Hello, $name"; 
+	});
+	
+	10.	@foreach ($tasks as $task) {{ $task }} @endforeach
+
