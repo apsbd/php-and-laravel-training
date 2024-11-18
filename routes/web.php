@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Blog;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,9 +14,22 @@ Route::get('/blogs', function () {
     ]);
 });
 
-Route::get('/blogs/{id}', function ($id) {
-    $blog = Blog::find($id);
+Route::get('/blogs/create', function () {
+    return view('create');
+});
 
+Route::post('/blogs', function (Request $request) {
+    $validated = $request->validate([
+        'title' => 'required|unique:blogs|max:255',
+        'body' => 'required'
+    ]);
+
+    Blog::create($validated);
+
+    return redirect('/blogs');
+});
+
+Route::get('/blogs/{blog}', function (Blog $blog) {
     return view('blog', ['blog' => $blog]);
 });
 
