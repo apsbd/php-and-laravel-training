@@ -13,7 +13,6 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-
         return view('posts', [
             'posts' => $posts
         ]);
@@ -37,15 +36,7 @@ class PostController extends Controller
             'contents' => 'required'
         ]);
 
-        // Post::create([
-        //     'title' => $validated['title'],
-        //     'contents' => $validated['contents'],
-        //     'user_id' => auth()->user()->id
-        // ]);
-
-        $user = auth()->user();
-
-        $user->posts()->create($validated);
+        Post::create($validated);
 
         return redirect('/posts');
     }
@@ -81,10 +72,6 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        abort_if($post->author->id !== auth()->user()->id, 401);
-
-        $post->delete();
-
-        return redirect('/posts');
+        //
     }
 }
