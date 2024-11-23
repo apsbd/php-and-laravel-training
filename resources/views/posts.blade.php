@@ -15,10 +15,16 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <ul>
                         @foreach ($posts as $post)
-                            <li>
-                                <a href="/posts/{{ $post['id'] }}" class="text-blue-500 hover:underline">
-                                    <strong>{{ $post['title'] }}</strong>
+                            <li class="flex justify-start items-center">
+                                <a href="/posts/{{ $post['id'] }}" class="text-blue-500 hover:underline p-2 pl-0">
+                                    <strong>{{ $post['title']}} by {{ $post->author->name }}</strong>
                                 </a>
+
+                                <form action="posts/{{ $post['id']}}" method="POST">
+                                    @method('delete')
+                                    @csrf
+                                    <button class="bg-red-600 px-2">Delete</button>
+                                </form>
                             </li>
                         @endforeach
                     </ul>
