@@ -1,38 +1,29 @@
 <?php
 
-use App\Models\Blog;
-use Illuminate\Http\Request;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home');
+    return view('welcome');
 });
 
-Route::get('/blogs', function () {
-    return view('blogs', [
-        'blogs' => Blog::all()
-    ]);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('posts', [PostController::class, 'index'])->name('posts.index');
+    Route::get('posts/create', [PostController::class, 'create'])->name('posts.create');
+    Route::post('posts', [PostController::class, 'store'])->name('posts.store');
+    Route::get('posts/{post}', [PostController::class, 'show'])->name('posts.show');
 });
 
-Route::get('/blogs/create', function () {
-    return view('create');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::post('/blogs', function (Request $request) {
-    $validated = $request->validate([
-        'title' => 'required|unique:blogs|max:255',
-        'body' => 'required'
-    ]);
-
-    Blog::create($validated);
-
-    return redirect('/blogs');
-});
-
-Route::get('/blogs/{blog}', function (Blog $blog) {
-    return view('blog', ['blog' => $blog]);
-});
-
-Route::get('/contact', function () {
-    return view('contact');
-});
+require __DIR__ . '/auth.php';
