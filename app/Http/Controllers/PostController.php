@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -12,7 +12,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::paginate(5);
 
         return view('posts', [
             'posts' => $posts
@@ -65,7 +65,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('edit', [
+            'post' => $post
+        ]);
     }
 
     /**
@@ -73,7 +75,16 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        Gate::authorize('update-post', $post);
+
+        $validated = $request->validate([
+            'title' => 'required|unique:posts|max:255',
+            'contents' => 'required'
+        ]);
+
+        $post->update($validated);
+
+        return redirect('/posts');
     }
 
     /**
@@ -81,7 +92,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        abort_if($post->author->id !== auth()->user()->id, 401);
+        Gate::authorize('delete-post', $post);
 
         $post->delete();
 
