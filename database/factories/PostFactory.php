@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Factories;
 
 use App\Models\User;
@@ -18,6 +17,7 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => User::factory(),
             'title' => fake()->sentence(),
             'contents' => fake()->paragraph(),
         ];
