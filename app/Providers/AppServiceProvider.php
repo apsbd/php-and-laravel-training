@@ -22,10 +22,18 @@ class AppServiceProvider extends ServiceProvider
     {
         //Define a Gate for for update and delete
         Gate::define('update-post', function($user, $post) {
+            if($user->hasRole('admin')) {
+                return true;
+            }
+
             return $user->id === $post->user_id;
         });
 
         Gate::define('delete-post', function($user, $post) {
+            if($user->hasRole('admin')) {
+                return true;
+            }
+
             return $user->id === $post->user_id;
         });
     }
