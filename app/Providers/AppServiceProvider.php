@@ -2,11 +2,17 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Gate;
+use App\Models\Post;
+use App\Policies\PostPolicy;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+
+    protected $policies = [
+        Post::class => PostPolicy::class, // Register the PostPolicy
+    ];
+
     /**
      * Register any application services.
      */
@@ -20,13 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //Define a Gate for for update and delete
-        Gate::define('update-post', function($user, $post) {
-            return $user->id === $post->user_id;
-        });
-
-        Gate::define('delete-post', function($user, $post) {
-            return $user->id === $post->user_id;
-        });
+        //
     }
 }
