@@ -65,6 +65,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        Gate::authorize('update-post', $post);
+
         return view('edit', [
             'post' => $post
         ]);
@@ -75,8 +77,6 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        Gate::authorize('update-post', $post);
-
         $validated = $request->validate([
             'title' => 'required|unique:posts|max:255',
             'contents' => 'required'
